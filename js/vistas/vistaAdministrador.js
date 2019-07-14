@@ -11,6 +11,11 @@ var VistaAdministrador = function(modelo, controlador, elementos) {
   this.modelo.preguntaAgregada.suscribir(function() {
     contexto.reconstruirLista();
   });
+
+  // suscripcion agregada. Pampa.-
+  this.modelo.preguntaEliminada.suscribir(function() { 
+    contexto.reconstruirLista(); 
+  });
 };
 
 
@@ -18,14 +23,17 @@ VistaAdministrador.prototype = {
   //lista
   inicializar: function() {
     //llamar a los metodos para reconstruir la lista, configurar botones y validar formularios
+    this.reconstruirLista();  // listo. Pampa.-
+    this.configuracionDeBotones(); // listo. Pampa.-
     validacionDeFormulario();
   },
 
   construirElementoPregunta: function(pregunta){
     var contexto = this;
-    var nuevoItem;
+    var nuevoItem = $("<li class='list-group-item' id="+pregunta.id+">"+pregunta.textoPregunta+"</li>"); // listo. Pampa.-
     //completar
     //asignar a nuevoitem un elemento li con clase "list-group-item", id "pregunta.id" y texto "pregunta.textoPregunta"
+
     var interiorItem = $('.d-flex');
     var titulo = interiorItem.find('h5');
     titulo.text(pregunta.textoPregunta);
@@ -53,14 +61,25 @@ VistaAdministrador.prototype = {
     e.botonAgregarPregunta.click(function() {
       var value = e.pregunta.val();
       var respuestas = [];
-
+      var paso = 1;
       $('[name="option[]"]').each(function() {
         //completar
+        console.log("paso "+paso);
+        respuestas.push({'textoRespuesta': $(this).val(), 'cantidad': 0});  // listo. Pampa.-
+        paso++;
       })
+      respuestas.pop();  // !!!!!! siempre se va un campo oculto y vacio al final del array, aca lo quito.
       contexto.limpiarFormulario();
       contexto.controlador.agregarPregunta(value, respuestas);
     });
     //asociar el resto de los botones a eventos
+
+    e.botonBorrarPregunta.click(function() {
+      var id = parseInt($('.list-group-item.active').attr('id'));
+      console.log("la pregunta a borrar es: "+id);
+      //contexto.limpiarFormulario();
+      contexto.controlador.borrarPregunta(id);
+    });
   },
 
   limpiarFormulario: function(){
