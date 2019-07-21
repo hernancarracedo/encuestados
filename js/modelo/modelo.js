@@ -2,7 +2,13 @@
  * Modelo
  */
 var Modelo = function() {
-  this.preguntas = [];
+  var datosEnLocalStorage = JSON.parse(localStorage.getItem('encuestas'));
+  if (datosEnLocalStorage == null) {
+    this.preguntas = [];
+  } else {
+    this.preguntas = datosEnLocalStorage;
+  }
+  
   this.ultimoId = 0;
 
   //inicializacion de eventos
@@ -10,6 +16,15 @@ var Modelo = function() {
 
   // evento agregado. Pampa.-
   this.preguntaEliminada = new Evento(this);
+
+  // evento agregado. Pampa.-
+  this.preguntaEditada = new Evento(this); 
+
+  // evento agregado. Pampa.-
+  this.todoBorrado = new Evento(this);  
+
+  // evento agregado. Pampa.-
+  this.votoGuardado = new Evento(this);
 };
 
 Modelo.prototype = {
@@ -39,10 +54,65 @@ Modelo.prototype = {
   // metodo agregado. Pampa.-
   borrarPregunta: function(id){
     this.preguntas = this.preguntas.filter(pregunta => pregunta.id !== id);
+    this.guardar();  
     this.preguntaEliminada.notificar();
   },
+
+
+  // metodo agregado. Pampa.-
+  editarPregunta: function(id,nuevaPregunta){
+    var indiceElementoAEditar;
+    this.preguntas.some(function(entry, i) {
+      if (entry.id == id) {
+        indiceElementoAEditar = i;
+       }
+    });
+  
+    this.preguntas[indiceElementoAEditar].textoPregunta = nuevaPregunta;
+    this.guardar(); 
+    this.preguntaEditada.notificar();
+    },
+
+  // metodo agregado. Pampa.-
+  borrarTodasLasPreguntas: function() { 
+    this.preguntas = [];
+    this.guardar();  
+    this.todoBorrado.notificar();
+  },  
+
+  agregarVoto: function(nombrePregunta,respuestaSeleccionada) { 
+    var indicePregunta;
+    this.preguntas.some(function(posicion, i) {
+      if (posicion.textoPregunta === nombrePregunta) {
+        indicePregunta = i;
+       }
+    });
+    console.log("Pregunta: "+nombrePregunta);
+    console.log("respuesta: "+respuestaSeleccionada);
+
+    let posiblesRespuestas = this.preguntas[indicePregunta].cantidadPorRespuesta;
+    //console.log(posiblesRespuestas);
+
+    var indiceRespuestaVotada = posiblesRespuestas.findIndex(respuestas => respuestas.textoRespuesta == respuestaSeleccionada)
+    //console.log("indice respuesta: "+indiceRespuestaVotada);
+    let votos = this.preguntas[indicePregunta].cantidadPorRespuesta[indiceRespuestaVotada].cantidad;
+    //console.log("votosAntes: "+votos);
+
+    votos++;
+    this.preguntas[indicePregunta].cantidadPorRespuesta[indiceRespuestaVotada].cantidad=votos;
+
+    this.guardar();  
+    this.votoGuardado.notificar();
+  },  
+
   
   //se guardan las preguntas
   guardar: function(){
+    localStorage.setItem('encuestas', JSON.stringify(this.preguntas));
   },
+
+
 };
+
+//         respuestas.push({'textoRespuesta': $(this).val(), 'cantidad': 0});  // listo. Pampa.-
+//     var nuevaPregunta = {'textoPregunta': nombre, 'id': id, 'cantidadPorRespuesta': respuestas};

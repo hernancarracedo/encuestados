@@ -15,4 +15,18 @@ Controlador.prototype = {
     this.modelo.borrarPregunta(id);
   }, 
 
+  //metodo agregado. Pampa.-
+  editarPregunta: function(id,nuevaPregunta) {
+    this.modelo.editarPregunta(id,nuevaPregunta);
+  }, 
+
+  //metodo agregado. Pampa.-
+  borrarTodasLasPreguntas: function() {
+    this.modelo.borrarTodasLasPreguntas();
+  },  
+
+  //metodo agregado. Pampa.-
+  agregarVoto: function(nombrePregunta,respuestaSeleccionada) {
+    this.modelo.agregarVoto(nombrePregunta,respuestaSeleccionada);
+  },  
 };

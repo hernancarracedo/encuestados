@@ -16,6 +16,16 @@ var VistaAdministrador = function(modelo, controlador, elementos) {
   this.modelo.preguntaEliminada.suscribir(function() { 
     contexto.reconstruirLista(); 
   });
+
+   // suscripcion agregada al evento de "pregunta editada". Pampa.-
+  this.modelo.preguntaEditada.suscribir(function() { 
+    contexto.reconstruirLista(); 
+  });
+
+  // suscripcion agregada al evento de "borrar todas las preguntas". Pampa.-
+  this.modelo.todoBorrado.suscribir(function() { 
+    contexto.reconstruirLista(); 
+  }); 
 };
 
 
@@ -30,6 +40,7 @@ VistaAdministrador.prototype = {
 
   construirElementoPregunta: function(pregunta){
     var contexto = this;
+    console.log(pregunta);
     var nuevoItem = $("<li class='list-group-item' id="+pregunta.id+">"+pregunta.textoPregunta+"</li>"); // listo. Pampa.-
     //completar
     //asignar a nuevoitem un elemento li con clase "list-group-item", id "pregunta.id" y texto "pregunta.textoPregunta"
@@ -61,25 +72,48 @@ VistaAdministrador.prototype = {
     e.botonAgregarPregunta.click(function() {
       var value = e.pregunta.val();
       var respuestas = [];
-      var paso = 1;
+      //var paso = 1;
       $('[name="option[]"]').each(function() {
         //completar
-        console.log("paso "+paso);
+        //console.log("paso "+paso);
         respuestas.push({'textoRespuesta': $(this).val(), 'cantidad': 0});  // listo. Pampa.-
-        paso++;
+        //paso++;
       })
       respuestas.pop();  // !!!!!! siempre se va un campo oculto y vacio al final del array, aca lo quito.
+
+/*
+$('[name="option[]"]').each(function() {
+  //completar
+  var respuesta = $(this).val();
+  if (respuesta.length > 0) {
+    respuestas.push({
+    textoRespuesta: respuesta,
+    cantidad: 0
+  });
+}
+*/
       contexto.limpiarFormulario();
       contexto.controlador.agregarPregunta(value, respuestas);
     });
+    
     //asociar el resto de los botones a eventos
-
-    e.botonBorrarPregunta.click(function() {
+    
+    e.botonBorrarPregunta.click(function() { // listo. Pampa./
       var id = parseInt($('.list-group-item.active').attr('id'));
-      console.log("la pregunta a borrar es: "+id);
-      //contexto.limpiarFormulario();
+      //console.log("la pregunta a borrar es: "+id);
       contexto.controlador.borrarPregunta(id);
     });
+
+    e.botonEditarPregunta.click(function() { // listo. Pampa./
+      var id = parseInt($('.list-group-item.active').attr('id'));
+      var nuevaPregunta = prompt("Ingrese el texto nuevo para la pregunta: ");
+      contexto.controlador.editarPregunta(id,nuevaPregunta);
+    });
+
+    e.borrarTodo.click(function() { // listo. Pampa./
+      contexto.controlador.borrarTodasLasPreguntas();
+    });  
+
   },
 
   limpiarFormulario: function(){
