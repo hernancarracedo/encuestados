@@ -10,11 +10,13 @@ var VistaUsuario = function(modelo, controlador, elementos) {
   //suscripcion a eventos del modelo
   this.modelo.preguntaAgregada.suscribir(function() {
     contexto.reconstruirLista();
+    contexto.dibujarGrafico();
   });
 
   //suscripcion a eventos del modelo
   this.modelo.votoGuardado.suscribir(function() {
-  contexto.reconstruirLista();
+    contexto.reconstruirLista();
+    contexto.dibujarGrafico();
   });
 
 };

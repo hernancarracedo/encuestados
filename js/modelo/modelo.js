@@ -14,17 +14,13 @@ var Modelo = function() {
   //inicializacion de eventos
   this.preguntaAgregada = new Evento(this);
 
-  // evento agregado. Pampa.-
-  this.preguntaEliminada = new Evento(this);
+  this.preguntaEliminada = new Evento(this); // evento agregado. Pampa.-
 
-  // evento agregado. Pampa.-
-  this.preguntaEditada = new Evento(this); 
+  this.preguntaEditada = new Evento(this); // evento agregado. Pampa.-
 
-  // evento agregado. Pampa.-
-  this.todoBorrado = new Evento(this);  
+  this.todoBorrado = new Evento(this);  // evento agregado. Pampa.-
 
-  // evento agregado. Pampa.-
-  this.votoGuardado = new Evento(this);
+  this.votoGuardado = new Evento(this); // evento agregado. Pampa.-
 };
 
 Modelo.prototype = {
@@ -91,18 +87,18 @@ Modelo.prototype = {
     console.log("respuesta: "+respuestaSeleccionada);
 
     let posiblesRespuestas = this.preguntas[indicePregunta].cantidadPorRespuesta;
-    //console.log(posiblesRespuestas);
+    console.log(posiblesRespuestas);
 
     var indiceRespuestaVotada = posiblesRespuestas.findIndex(respuestas => respuestas.textoRespuesta == respuestaSeleccionada)
-    //console.log("indice respuesta: "+indiceRespuestaVotada);
+    console.log("indice respuesta: "+indiceRespuestaVotada);
     let votos = this.preguntas[indicePregunta].cantidadPorRespuesta[indiceRespuestaVotada].cantidad;
-    //console.log("votosAntes: "+votos);
+    console.log("votosAntes: "+votos);
 
     votos++;
     this.preguntas[indicePregunta].cantidadPorRespuesta[indiceRespuestaVotada].cantidad=votos;
 
     this.guardar();  
-    this.votoGuardado.notificar();
+    //this.votoGuardado.notificar();
   },  
 
   
