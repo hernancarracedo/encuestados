@@ -75,9 +75,7 @@ VistaAdministrador.prototype = {
       //var paso = 1;
       $('[name="option[]"]').each(function() {
         //completar
-        //console.log("paso "+paso);
         respuestas.push({'textoRespuesta': $(this).val(), 'cantidad': 0});  // listo. Pampa.-
-        //paso++;
       })
       respuestas.pop();  // !!!!!! siempre se va un campo oculto y vacio al final del array, aca lo quito.
 
@@ -120,3 +118,11 @@ $('[name="option[]"]').each(function() {
     $('.form-group.answer.has-feedback.has-success').remove();
   },
 };
+
+
+
+e.botonBorrarPregunta.click(function() { 
+ 
+  //tu codigo
+ 
+});
