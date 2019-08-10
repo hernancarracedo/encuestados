@@ -92,8 +92,11 @@ VistaUsuario.prototype = {
         var id = $(this).attr('id');
         var respuestaSeleccionada = $('input[name=' + id + ']:checked').val();
         $('input[name=' + id + ']').prop('checked',false);
-        contexto.controlador.agregarVoto(nombrePregunta,respuestaSeleccionada);
-      });
+        if (respuestaSeleccionada !== undefined) { // controlo no enviar respuestas vacias
+          contexto.controlador.agregarVoto(nombrePregunta,respuestaSeleccionada);
+        }
+    });
+    $('#nombreUsuario').val("");
   },
 
   dibujarGrafico: function(nombre, respuestas){

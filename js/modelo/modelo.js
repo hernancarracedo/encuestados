@@ -1,6 +1,6 @@
-/*
- * Modelo
- */
+
+/* Modelo  */
+
 var Modelo = function() {
   var datosEnLocalStorage = JSON.parse(localStorage.getItem('encuestas'));
   if (datosEnLocalStorage == null) {
@@ -24,7 +24,6 @@ Modelo.prototype = {
   obtenerUltimoId: function() {
     var cantPreguntas = this.preguntas.length;
     var ultimoId;
-    //console.log("pregunta en array: "+cantPreguntas);
     if (cantPreguntas == 0) {
       ultimoId = 0;
     } else {
@@ -79,16 +78,11 @@ Modelo.prototype = {
         indicePregunta = i;
        }
     });
-    console.log("Pregunta: "+nombrePregunta);
-    console.log("respuesta: "+respuestaSeleccionada);
 
     let posiblesRespuestas = this.preguntas[indicePregunta].cantidadPorRespuesta;
-    console.log(posiblesRespuestas);
 
     var indiceRespuestaVotada = posiblesRespuestas.findIndex(respuestas => respuestas.textoRespuesta == respuestaSeleccionada)
-    console.log("indice respuesta: "+indiceRespuestaVotada);
     let votos = this.preguntas[indicePregunta].cantidadPorRespuesta[indiceRespuestaVotada].cantidad;
-    //console.log("votosAntes: "+votos);
 
     votos++;
     this.preguntas[indicePregunta].cantidadPorRespuesta[indiceRespuestaVotada].cantidad=votos;
@@ -97,14 +91,9 @@ Modelo.prototype = {
     this.votoGuardado.notificar();
   },  
 
-  
   //se guardan las preguntas
   guardar: function(){
     localStorage.setItem('encuestas', JSON.stringify(this.preguntas));
   },
 
-
 };
-
-//         respuestas.push({'textoRespuesta': $(this).val(), 'cantidad': 0});  // listo. Pampa.-
-//     var nuevaPregunta = {'textoPregunta': nombre, 'id': id, 'cantidadPorRespuesta': respuestas};
